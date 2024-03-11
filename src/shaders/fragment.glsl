@@ -1,10 +1,16 @@
 precision mediump float;
-uniform sampler2D picture;
-varying vec2 vUv;
 varying vec3 vPosition;
+
+uniform sampler2D state1;
+uniform sampler2D state2;
+uniform float uProgress;
+varying vec2 vUv;
+
 void main(){
-    vec4 tt = texture2D(picture,vUv);
-    gl_FragColor = vec4(vUv,0.,1.);
-    gl_FragColor =  tt;
-    if(gl_FragColor.r < 0.1 && gl_FragColor.b < 0.1 && gl_FragColor.g < 0.1)discard;
+    vec4 color = texture2D(state1, vUv);
+    vec4 color2 = texture2D(state2, vec2(vUv.x, 1. - vUv.y));
+
+    vec4 finalColor = mix(color,color2, uProgress);
+
+    gl_FragColor = finalColor;
 }
